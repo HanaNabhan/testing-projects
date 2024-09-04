@@ -1,0 +1,297 @@
+{
+	"info": {
+		"_postman_id": "9d254e3c-55b4-4ae2-9dd2-98c16874aabd",
+		"name": "GOREST",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37549386"
+	},
+	"item": [
+		{
+			"name": "postnew",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.environment.set(\"id_env\", jsonData.id);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.globals.set(\"url_control\",\"https://gorest.co.in/public/v2/users\");\r",
+							"var random =Math.random().toString(36).substring(2);\r",
+							"var username = \"Hana\"+random;\r",
+							"var useremail=\"Hana\"+random+\"@gmail.com\";\r",
+							"pm.environment.set(\"name_env\",username);\r",
+							"pm.environment.set(\"email_env\",useremail);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "b0142828c654e38096b67a66659390b64f02426491c6440e819691753444ea00",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"{{name_env}}\",\r\n    \"gender\": \"female\",\r\n    \"email\":\"{{email_env}}\",\r\n    \"status\":\"inactive\"\r\n    \r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url_control}}",
+					"host": [
+						"{{url_control}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getdata",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//status code\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"var jsonData= pm.response.json();\r",
+							"pm.test(\"check data \",()=> {\r",
+							"  \r",
+							"   pm.expect(jsonData.id).to.eql(pm.environment.get(\"id_env\"));\r",
+							"   pm.expect(jsonData.email).to.eql(pm.environment.get(\"email_env\"));\r",
+							"    pm.expect(jsonData.name).to.eql(pm.environment.get(\"name_env\"));\r",
+							"\r",
+							"});\r",
+							"const name = jsonData.name;\r",
+							"const email = jsonData.email;\r",
+							"const gender = jsonData.gender;\r",
+							"const status = jsonData.status;\r",
+							"console.log(\"Name:\", name);\r",
+							"console.log(\"Email:\", email);\r",
+							"console.log(\"Gender:\", gender);\r",
+							"console.log(\"Status:\", status);\r",
+							"pm.environment.set(\"name\",name);\r",
+							"pm.environment.set(\"email\",email);\r",
+							"pm.environment.set(\"gender\",gender);\r",
+							"pm.environment.set(\"status\",status);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//pm.variables.set(\"url_control\",\"http://localhost:3000/users\");\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "b0142828c654e38096b67a66659390b64f02426491c6440e819691753444ea00",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url_control}}/{{id_env}}",
+					"host": [
+						"{{url_control}}"
+					],
+					"path": [
+						"{{id_env}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updatenew",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const name = pm.environment.get(\"name\");\r",
+							"const email = pm.environment.get(\"email\");\r",
+							"const gender = pm.environment.get(\"gender\");\r",
+							"const status = pm.environment.get(\"status\");\r",
+							"\r",
+							"console.log(\"Name:\", name);\r",
+							"console.log(\"Email:\", email);\r",
+							"console.log(\"Gender:\", gender);\r",
+							"console.log(\"Status:\", status);\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData= pm.response.json();\r",
+							"const name = jsonData.name;\r",
+							"const email = jsonData.email;\r",
+							"const gender = jsonData.gender;\r",
+							"const status = jsonData.status;\r",
+							"console.log(\"New_Name:\", name);\r",
+							"console.log(\"New_Email:\", email);\r",
+							"console.log(\"New_Gender:\", gender);\r",
+							"console.log(\"New_Status:\", status);\r",
+							"console.log(jsonData);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "b0142828c654e38096b67a66659390b64f02426491c6440e819691753444ea00",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"hana nabhan\",\r\n    \"gender\": \"male\",\r\n    \"email\":\"student45659897@gmail.com\",\r\n    \"status\":\"active\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url_control}}/{{id_env}}",
+					"host": [
+						"{{url_control}}"
+					],
+					"path": [
+						"{{id_env}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteUserdata",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.environment.unset(\"email_env\");\r",
+							"pm.environment.unset(\"id_env\");\r",
+							"pm.environment.unset(\"name_env\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "b0142828c654e38096b67a66659390b64f02426491c6440e819691753444ea00",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url_control}}/{{id_env}}",
+					"host": [
+						"{{url_control}}"
+					],
+					"path": [
+						"{{id_env}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "b0142828c654e38096b67a66659390b64f02426491c6440e819691753444ea00",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
